@@ -9,10 +9,19 @@ st.set_page_config(
 )
 st.title("📜 ระบบค้นหาและดาวน์โหลดเกียรติบัตร")
 
-# รายชื่อไฟล์ PDF ทั้ง 4 งาน
-PDF_FILES = ["job1.pdf", "job2.pdf", "job3.pdf", "job4.pdf"]
+# รายชื่อไฟล์ PDF ทั้งหมด 8 งาน (job1 - job8)
+PDF_FILES = [
+    "job1.pdf",
+    "job2.pdf",
+    "job3.pdf",
+    "job4.pdf",
+    "job5.pdf",
+    "job6.pdf",
+    "job7.pdf",
+    "job8.pdf",
+]
 
-# ช่องกรอกค้นหาชื่อ-นามสกุลช่องเดียว
+# ช่องกรอกค้นหาชื่อ-นามสกุล
 search_name = st.text_input("กรอกชื่อ-นามสกุล ที่ต้องการค้นหา:")
 
 if st.button("🔍 ค้นหาเกียรติบัตร"):
@@ -23,7 +32,7 @@ if st.button("🔍 ค้นหาเกียรติบัตร"):
     else:
         total_found = 0
 
-        # ค้นหาจากไฟล์ทั้ง 4 งาน
+        # ค้นหาข้อความจากทั้ง 8 ไฟล์
         for pdf_file in PDF_FILES:
             try:
                 doc = fitz.open(pdf_file)
@@ -37,7 +46,7 @@ if st.button("🔍 ค้นหาเกียรติบัตร"):
                 if clean_name in page_text:
                     total_found += 1
 
-                    # แสดงภาพตัวอย่าง Preview
+                    # แปลงหน้า PDF เป็นภาพตัวอย่าง Preview (150 dpi)
                     pix = page.get_pixmap(dpi=150)
                     img_bytes = pix.tobytes("png")
 
@@ -48,7 +57,7 @@ if st.button("🔍 ค้นหาเกียรติบัตร"):
                         use_container_width=True,
                     )
 
-                    # สร้างไฟล์ PDF เพื่อดาวน์โหลดเฉพาะใบ
+                    # สร้างไฟล์ PDF สำหรับดาวน์โหลดเฉพาะใบ
                     single_doc = fitz.open()
                     single_doc.insert_pdf(
                         doc, from_page=page_index, to_page=page_index
